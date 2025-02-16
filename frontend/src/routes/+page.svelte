@@ -7,6 +7,7 @@
   import SettingsModal from '$lib/components/SettingsModal.svelte';
   import TimerModal from '$lib/components/TimerModal.svelte';
   import StationSettingsModal from '$lib/components/StationSettingsModal.svelte';
+  import VideoStream from '$lib/components/VideoStream.svelte';
   import { api, initializeWebSocket } from '$lib/services/api';
 
   let state: AppState;
@@ -442,10 +443,18 @@
             </button>
           </div>
         </div>
-      {:else}
+      {:else if state.current_page === 'data'}
         <!-- Data visualization page -->
         <div class="h-full flex items-center justify-center text-2xl text-gray-600 dark:text-gray-400">
           Data visualization coming soon...
+        </div>
+      {:else if state.current_page === 'video'}
+        <!-- Video feed page -->
+        <div class="w-full max-w-4xl mx-auto p-4">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Live Camera Feed</h2>
+            <VideoStream />
+          </div>
         </div>
       {/if}
     </div>

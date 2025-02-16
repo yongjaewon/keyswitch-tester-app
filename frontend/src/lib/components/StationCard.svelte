@@ -55,7 +55,7 @@
         <div class="flex flex-col min-[410px]:flex-row gap-4">
           <!-- Cycle count -->
           <div class="relative flex flex-col py-1 bg-gray-100 dark:bg-gray-700/50 rounded-lg min-h-[60px] min-[410px]:min-w-[80px] min-[410px]:flex-1">
-            <div class="absolute inset-0 flex items-center justify-center">
+            <div class="absolute inset-0 flex items-center justify-center min-[410px]:-mt-[5px]">
               <div class="flex items-baseline gap-2">
                 <div class="text-2xl min-[450px]:text-3xl font-bold text-gray-900 dark:text-white">
                   {station.current_cycles.toLocaleString()}
@@ -65,7 +65,7 @@
                 </div>
               </div>
             </div>
-            <div class="absolute bottom-4 left-0 right-0 text-base font-medium text-center text-gray-500 dark:text-gray-400 hidden min-[410px]:block">
+            <div class="absolute bottom-4 left-0 right-0 text-base font-medium text-center text-gray-500 dark:text-gray-400 hidden min-[410px]:block min-[410px]:-mt-[5px]">
               Cycles
             </div>
           </div>

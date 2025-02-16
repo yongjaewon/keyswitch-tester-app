@@ -4,7 +4,7 @@
     import { fade } from 'svelte/transition';
 
     $: state = $connectionStore;
-    $: show_loading = state.is_initializing || state.is_first_connection || !state.is_data_loaded;
+    $: show_loading = state.is_initializing || state.is_first_connection || !state.is_data_loaded || !state.is_connected;
     $: message = getLoadingMessage(state);
 
     function getLoadingMessage(state: ConnectionState): string {
@@ -15,7 +15,7 @@
             return 'Connecting to server...';
         }
         if (!state.is_data_loaded) {
-            return 'Connecting to server...';
+            return 'Loading data...';
         }
         return 'Starting application...';
     }
@@ -26,9 +26,11 @@
 </script>
 
 {#if show_loading}
-    <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50 flex items-center justify-center" transition:fade>
         <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl flex flex-col items-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 dark:border-gray-600 border-t-blue-600"></div>
+            {#if !state.has_reached_max_attempts}
+                <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 dark:border-gray-600 border-t-blue-600"></div>
+            {/if}
             <p class="mt-4 text-lg font-medium text-gray-900 dark:text-white">{message}</p>
             {#if state.has_reached_max_attempts}
                 <button

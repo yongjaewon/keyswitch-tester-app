@@ -13,7 +13,7 @@ export interface Station {
 }
 
 export interface AppState {
-  current_page: 'test' | 'data';
+  current_page: 'test' | 'data' | 'video';
   show_timer_modal: boolean;
   show_settings_modal: boolean;
   show_station_settings_modal: boolean;

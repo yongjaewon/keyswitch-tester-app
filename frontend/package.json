@@ -31,10 +31,5 @@
     "typescript": "^5.3.3",
     "vite": "^6.0.0",
     "vite-svg-loader": "^5.1.0"
-  },
-  "dependencies": {
-    "@popperjs/core": "^2.11.8",
-    "lucide-svelte": "^0.475.0",
-    "tailwind-merge": "^2.6.0"
   }
 }
