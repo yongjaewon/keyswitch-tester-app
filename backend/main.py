@@ -1,6 +1,6 @@
 # backend/main.py
 
-from fastapi import FastAPI, WebSocket, HTTPException, Depends, APIRouter, Path, Body
+from fastapi import FastAPI, WebSocket, HTTPException, Depends, APIRouter, Path, Body, Request
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import asyncio
@@ -11,6 +11,9 @@ from datetime import datetime, timedelta, timezone
 from contextlib import asynccontextmanager
 from starlette.websockets import WebSocketDisconnect
 from dotenv import load_dotenv
+import json
+from aiortc import RTCPeerConnection, RTCSessionDescription
+from camera import CameraManager
 
 from database import get_db, init_db
 from models import Station, SystemSettings, SystemState, SystemHistory, MachineStateEnum
@@ -721,6 +724,32 @@ async def set_timer(timer: TimerSettings, db: Session = Depends(get_db)):
     await broadcast_status_update(db)
     
     return SuccessResponse(success=True)
+
+@app.post("/api/webrtc/offer")
+async def handle_offer(request: Request):
+    params = await request.json()
+    offer = RTCSessionDescription(sdp=params["sdp"]["sdp"], type=params["sdp"]["type"])
+    
+    pc = RTCPeerConnection()
+    camera_manager = CameraManager.get_instance()
+    
+    @pc.on("connectionstatechange")
+    async def on_connectionstatechange():
+        if pc.connectionState == "failed" or pc.connectionState == "closed":
+            await pc.close()
+            camera_manager.stop_camera()
+    
+    # Add camera track
+    pc.addTrack(camera_manager.get_track())
+    
+    # Set the remote description
+    await pc.setRemoteDescription(offer)
+    
+    # Create and set local description
+    answer = await pc.createAnswer()
+    await pc.setLocalDescription(answer)
+    
+    return {"sdp": pc.localDescription.dict()}
 
 # Include the API router
 app.include_router(api_router)

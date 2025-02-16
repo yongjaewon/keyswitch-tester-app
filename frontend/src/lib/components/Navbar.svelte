@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { appStore } from '../stores/appStore';
+  import { appStore, actions } from '../stores/appStore';
   import type { AppState } from '../stores/appStore';
   import orangeLogo from '$lib/assets/logos/WRIGHT_LOGO_ORANGE.svg?url';
   import { onMount } from 'svelte';
@@ -7,6 +7,12 @@
   let isMenuOpen = false;
   let isDarkMode = false;
   let themeMode: 'light' | 'dark' | 'auto' = 'auto';
+  
+  // Subscribe to store
+  let state: AppState;
+  appStore.subscribe((newState: AppState) => {
+    state = newState;
+  });
   
   function updateTheme(mode: typeof themeMode) {
     const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -70,7 +76,7 @@
         <div class="hidden sm:ml-8 sm:flex sm:space-x-2 sm:items-center">
           <button
             class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ease-in-out
-                   {$appStore.current_page === 'test' ? 
+                   {state.current_page === 'test' ? 
                      'bg-brand text-gray-900 shadow-lg scale-105' : 
                      'bg-gray-100 text-gray-700 hover:bg-brand hover:text-gray-900 hover:scale-105 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-brand dark:hover:text-gray-900'}"
             on:click={() => setPage('test')}
@@ -79,12 +85,21 @@
           </button>
           <button
             class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ease-in-out
-                   {$appStore.current_page === 'data' ? 
+                   {state.current_page === 'data' ? 
                      'bg-brand text-gray-900 shadow-lg scale-105' : 
                      'bg-gray-100 text-gray-700 hover:bg-brand hover:text-gray-900 hover:scale-105 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-brand dark:hover:text-gray-900'}"
             on:click={() => setPage('data')}
           >
             Data
+          </button>
+          <button
+            class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ease-in-out
+                   {state.current_page === 'video' ? 
+                     'bg-brand text-gray-900 shadow-lg scale-105' : 
+                     'bg-gray-100 text-gray-700 hover:bg-brand hover:text-gray-900 hover:scale-105 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-brand dark:hover:text-gray-900'}"
+            on:click={() => setPage('video')}
+          >
+            Camera
           </button>
         </div>
       </div>
@@ -202,7 +217,7 @@
     <div class="px-2 pt-2 pb-3 space-y-1">
       <button
         class="w-full text-left px-4 py-3 text-base font-medium rounded-lg transition-all duration-200
-               {$appStore.current_page === 'test' ? 
+               {state.current_page === 'test' ? 
                  'bg-brand text-gray-900 shadow-md' : 
                  'bg-gray-100 text-gray-700 hover:bg-brand hover:text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-brand dark:hover:text-gray-900'}"
         on:click={() => setPage('test')}
@@ -211,12 +226,21 @@
       </button>
       <button
         class="w-full text-left px-4 py-3 text-base font-medium rounded-lg transition-all duration-200
-               {$appStore.current_page === 'data' ? 
+               {state.current_page === 'data' ? 
                  'bg-brand text-gray-900 shadow-md' : 
                  'bg-gray-100 text-gray-700 hover:bg-brand hover:text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-brand dark:hover:text-gray-900'}"
         on:click={() => setPage('data')}
       >
         Data
+      </button>
+      <button
+        class="w-full text-left px-4 py-3 text-base font-medium rounded-lg transition-all duration-200
+               {state.current_page === 'video' ? 
+                 'bg-brand text-gray-900 shadow-md' : 
+                 'bg-gray-100 text-gray-700 hover:bg-brand hover:text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-brand dark:hover:text-gray-900'}"
+        on:click={() => setPage('video')}
+      >
+        Camera
       </button>
     </div>
   </div>

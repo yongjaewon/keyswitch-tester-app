@@ -3,7 +3,6 @@
   import { onMount } from 'svelte';
   import { initializeWebSocket } from '$lib/services/api';
   import LoadingScreen from '$lib/components/LoadingScreen.svelte';
-  import ReconnectionDialog from '$lib/components/ReconnectionDialog.svelte';
   import Navbar from '$lib/components/Navbar.svelte';
   import { connectionStore } from '$lib/stores/connectionStore';
 
@@ -26,4 +25,19 @@
 
 <!-- Connection-related modals at the highest level -->
 <LoadingScreen />
-<ReconnectionDialog /> 
+
+<style global>
+  /* Disable zooming and unwanted touch behaviors globally */
+  html, body {
+    touch-action: pan-x pan-y;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  * {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+</style> 

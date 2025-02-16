@@ -7,3 +7,7 @@ pyserial>=3.5
 python-dotenv>=1.0.0
 typing-extensions>=4.8.0
 phidget22>=1.22.20250106
+opencv-python>=4.8.1
+aiortc>=1.5.0
+numpy>=1.26.0
+av>=10.0.0  # Required by aiortc for video encoding
