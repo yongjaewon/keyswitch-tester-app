@@ -41,12 +41,4 @@ class WebSocketManager:
 
         # Clean up any disconnected clients
         for connection in disconnected:
-            await self.disconnect(connection)
-
-    async def send_personal_message(self, message: Dict[str, Any], websocket: WebSocket):
-        """Send a message to a specific client"""
-        try:
-            await websocket.send_json(message)
-        except Exception as e:
-            self.logger.error(f"Failed to send personal message: {e}")
-            await self.disconnect(websocket) 
+            await self.disconnect(connection) 

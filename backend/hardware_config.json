@@ -1,0 +1,21 @@
+{
+  "phidgets": {
+    "sensor_mode": "event",
+    "data_interval": 100,
+    "ports": {
+      "supply_voltage": 0,
+      "motor_current": 1,
+      "switch_current": 2
+    }
+  },
+  "servo": {
+    "default_target_angle": 100,
+    "current_limit_percent": 7,
+    "baudrate": 57600
+  },
+  "low_voltage": {
+    "cutoff_voltage": 11.1,
+    "shutdown_duration": 5,
+    "restart_voltage": 11.5
+  }
+} 
