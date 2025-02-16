@@ -1,10 +1,14 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
+  import { Maximize2, Minimize2 } from 'lucide-svelte';
   
   let videoRef: HTMLVideoElement;
+  let containerRef: HTMLDivElement;
   let peerConnection: RTCPeerConnection | null = null;
   let isConnecting = false;
   let error: string | null = null;
+  let showControls = false;
+  let isFullscreen = false;
   
   const config = {
     iceServers: [
@@ -71,16 +75,35 @@
     }
   }
   
+  function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+      containerRef.requestFullscreen().catch((err) => {
+        console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  }
+  
+  function handleFullscreenChange() {
+    isFullscreen = !!document.fullscreenElement;
+  }
+  
   onMount(() => {
     startStream();
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
   });
   
   onDestroy(() => {
     stopStream();
+    document.removeEventListener('fullscreenchange', handleFullscreenChange);
   });
 </script>
 
-<div class="relative w-full">
+<div class="relative w-full" 
+     bind:this={containerRef}
+     on:mouseenter={() => showControls = true}
+     on:mouseleave={() => showControls = false}>
   {#if error}
     <div class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 rounded-lg">
       <div class="text-white text-center p-4">
@@ -105,13 +128,30 @@
     </div>
   {/if}
 
-  <div class="relative w-full aspect-video bg-gray-900 rounded-lg overflow-hidden">
+  <div class="relative w-full aspect-video bg-gray-900 rounded-lg overflow-hidden group">
     <video
       bind:this={videoRef}
       autoplay
       playsinline
       class="w-full h-full object-contain"
     />
+    
+    <!-- Fullscreen button overlay -->
+    <div class="absolute bottom-4 right-4 transition-opacity duration-200 {showControls ? 'opacity-100' : 'opacity-0'}"
+         class:opacity-0={!showControls}
+         class:opacity-100={showControls}>
+      <button
+        class="p-2.5 text-white bg-black/70 hover:bg-black/90 rounded-lg transition-colors shadow-lg backdrop-blur-sm"
+        on:click={toggleFullScreen}
+        title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+      >
+        {#if isFullscreen}
+          <Minimize2 size={20} />
+        {:else}
+          <Maximize2 size={20} />
+        {/if}
+      </button>
+    </div>
   </div>
 </div>
 
