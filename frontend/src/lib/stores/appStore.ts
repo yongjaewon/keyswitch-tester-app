@@ -12,6 +12,13 @@ export interface Station {
   switch_current: string;
 }
 
+export interface HistoryEntry {
+  timestamp: string;
+  station_id?: number;
+  event: string;
+  details: string;
+}
+
 export interface AppState {
   current_page: 'test' | 'data' | 'video';
   show_timer_modal: boolean;
@@ -30,6 +37,7 @@ export interface AppState {
   stations: Station[];
   selected_station: Station | null;
   supply_voltage: number;
+  history: HistoryEntry[];
 }
 
 // Initial state
@@ -58,7 +66,8 @@ const initialState: AppState = {
     current_cycles: 0,
     motor_current: "0.0 A",
     switch_current: "0.0 A"
-  }))
+  })),
+  history: []
 };
 
 // Create the store
@@ -126,6 +135,13 @@ if (typeof window !== 'undefined') {
               stations: updatedStations
           };
       });
+  });
+
+  onMessage('history_update', (data: HistoryEntry[]) => {
+      appStore.update(state => ({
+          ...state,
+          history: data
+      }));
   });
 }
 

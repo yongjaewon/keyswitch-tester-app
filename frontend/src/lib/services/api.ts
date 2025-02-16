@@ -1,5 +1,6 @@
 import type { AppState } from '../stores/appStore';
 import { connectionStore } from '../stores/connectionStore';
+import { appStore } from '../stores/appStore';
 
 // Types for API requests and responses
 interface SystemSettings {
@@ -259,4 +260,27 @@ export const api = {
     });
     return response.success;
   },
-}; 
+
+  async getHistory(): Promise<any[]> {
+    const response = await fetch(`${API_BASE_URL}/history`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch history');
+    }
+    return response.json();
+  }
+};
+
+// WebSocket message handlers
+onMessage('status_update', (data: any) => {
+    appStore.update((state: AppState) => ({
+        ...state,
+        // ... existing code ...
+    }));
+});
+
+onMessage('history_update', (data: any) => {
+    appStore.update((state: AppState) => ({
+        ...state,
+        history: data
+    }));
+}); 

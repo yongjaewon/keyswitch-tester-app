@@ -69,13 +69,17 @@
       }
     }, 1000);
 
-    // Load initial settings from the backend
+    // Load initial settings and history from the backend
     (async () => {
       try {
-        const settings = await api.getSettings();
+        const [settings, history] = await Promise.all([
+          api.getSettings(),
+          api.getHistory()
+        ]);
         actions.saveSettings(settings);
+        appStore.update(s => ({ ...s, history }));
       } catch (error) {
-        console.error('Error loading settings:', error);
+        console.error('Error loading initial data:', error);
       }
     })();
 
@@ -445,8 +449,42 @@
         </div>
       {:else if state.current_page === 'data'}
         <!-- Data visualization page -->
-        <div class="h-full flex items-center justify-center text-2xl text-gray-600 dark:text-gray-400">
-          Data visualization coming soon...
+        <div class="p-4">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">System History</h2>
+            
+            <!-- History Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead class="bg-gray-50 dark:bg-gray-700/50">
+                  <tr>
+                    <th class="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Time</th>
+                    <th class="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Station</th>
+                    <th class="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Event</th>
+                    <th class="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400">Details</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                  {#each state.history || [] as entry}
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                      <td class="px-4 py-3 text-sm text-gray-900 dark:text-white whitespace-nowrap">
+                        {new Date(entry.timestamp).toLocaleString()}
+                      </td>
+                      <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                        {entry.station_id ? `Station ${entry.station_id}` : 'System'}
+                      </td>
+                      <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                        {entry.event}
+                      </td>
+                      <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                        {entry.details}
+                      </td>
+                    </tr>
+                  {/each}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       {:else if state.current_page === 'video'}
         <!-- Video feed page -->

@@ -19,7 +19,7 @@
       <!-- Mobile layout (2x2 grid) for screens below 640px -->
       <div class="min-[620px]:hidden">
         <!-- Top row: Station ID and toggle switch -->
-        <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="grid grid-cols-2 gap-4 mb-[14px]">
           <!-- Top Left: Station ID -->
           <div class="flex items-center">
             <h3 class="text-xl min-[450px]:text-2xl font-bold text-gray-900 dark:text-white whitespace-nowrap">Station {station.id}</h3>

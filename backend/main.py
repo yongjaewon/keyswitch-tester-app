@@ -198,6 +198,29 @@ async def broadcast_status_update(db: Session):
         if system_state.timer_end_time:
             timer_end_time = system_state.timer_end_time.replace(microsecond=0).strftime('%Y-%m-%dT%H:%M:%SZ')
         
+        # Get and broadcast history
+        history = db.query(SystemHistory).order_by(SystemHistory.id.desc()).all()
+        history_update = {
+            'type': 'history_update',
+            'data': [
+                {
+                    "timestamp": entry.id,  # Using ID as timestamp for now
+                    "station_id": entry.station_id,
+                    "event": f"{'System' if not entry.station_id else f'Station {entry.station_id}'} update",
+                    "details": (
+                        f"Cycles: {entry.current_cycles}, "
+                        f"Motor failures: {entry.motor_failures}, "
+                        f"Switch failures: {entry.switch_failures}, "
+                        f"Motor current: {entry.motor_current:.1f}A, "
+                        f"Switch current: {entry.switch_current:.1f}A"
+                    )
+                }
+                for entry in history
+            ]
+        }
+        await ws_manager.broadcast(history_update)
+        
+        # Continue with existing status update broadcast
         status_update = {
             'type': 'status_update',
             'data': {
@@ -750,6 +773,26 @@ async def handle_offer(request: Request):
     await pc.setLocalDescription(answer)
     
     return {"sdp": pc.localDescription.dict()}
+
+@api_router.get("/history", response_model=List[dict])
+async def get_history(db: Session = Depends(get_db)):
+    """Get system history"""
+    history = db.query(SystemHistory).order_by(SystemHistory.id.desc()).all()
+    return [
+        {
+            "timestamp": entry.id,  # Using ID as timestamp for now
+            "station_id": entry.station_id,
+            "event": f"{'System' if not entry.station_id else f'Station {entry.station_id}'} update",
+            "details": (
+                f"Cycles: {entry.current_cycles}, "
+                f"Motor failures: {entry.motor_failures}, "
+                f"Switch failures: {entry.switch_failures}, "
+                f"Motor current: {entry.motor_current:.1f}A, "
+                f"Switch current: {entry.switch_current:.1f}A"
+            )
+        }
+        for entry in history
+    ]
 
 # Include the API router
 app.include_router(api_router)

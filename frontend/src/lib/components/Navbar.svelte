@@ -90,7 +90,7 @@
                      'bg-gray-100 text-gray-700 hover:bg-brand hover:text-gray-900 hover:scale-105 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-brand dark:hover:text-gray-900'}"
             on:click={() => setPage('data')}
           >
-            Data
+            Log
           </button>
           <button
             class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ease-in-out
@@ -231,7 +231,7 @@
                  'bg-gray-100 text-gray-700 hover:bg-brand hover:text-gray-900 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-brand dark:hover:text-gray-900'}"
         on:click={() => setPage('data')}
       >
-        Data
+        Log
       </button>
       <button
         class="w-full text-left px-4 py-3 text-base font-medium rounded-lg transition-all duration-200
