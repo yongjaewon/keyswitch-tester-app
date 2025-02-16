@@ -133,7 +133,7 @@
               <!-- Start/Stop button -->
               <button type="button" 
                       on:click={actions.toggleRunning}
-                      class="text-white font-bold rounded-lg text-2xl min-[400px]:text-3xl sm:text-4xl px-5 h-[70px] sm:h-[94px] transition-all border border-gray-300/90 shadow-md
+                      class="text-white font-bold rounded-lg text-2xl min-[400px]:text-3xl sm:text-4xl px-5 h-[70px] sm:h-[92px] transition-all border border-gray-300/90 shadow-md
                       {state.machine_state === 'on' ? 'bg-red-600 active:bg-red-700 dark:bg-red-700 dark:active:bg-red-800' : 
                        state.machine_state === 'off' ? 'bg-green-600 active:bg-green-700 dark:bg-green-700 dark:active:bg-green-800' : 
                        'bg-gray-500 cursor-not-allowed'}">
@@ -149,7 +149,7 @@
                           appStore.update((s: AppState) => ({ ...s, show_timer_modal: true }));
                         }
                       }}
-                      class="relative text-white bg-gray-600 active:bg-gray-700 font-bold rounded-lg text-xl min-[400px]:text-2xl sm:text-3xl px-5 h-[70px] sm:h-[94px] dark:bg-gray-700 dark:active:bg-gray-800 transition-all flex items-center justify-center gap-2 border border-gray-300/90 shadow-md {state.timer_active ? 'border-4 flash-border border-red-500' : ''}">
+                      class="relative text-white bg-gray-600 active:bg-gray-700 font-bold rounded-lg text-xl min-[400px]:text-2xl sm:text-3xl px-5 h-[70px] sm:h-[92px] dark:bg-gray-700 dark:active:bg-gray-800 transition-all flex items-center justify-center gap-2 border border-gray-300/90 shadow-md {state.timer_active ? 'border-4 flash-border border-red-500' : ''}">
                 {#if !state.timer_active}
                   Set Timer
                 {:else}
@@ -166,7 +166,7 @@
           <div class="flex-1 flex flex-col lg:flex-row gap-4">
             <!-- Left side - Station cards -->
             <div class="flex-1">
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 lg:flex lg:flex-col lg:h-[calc(100vh-7rem)] gap-4">
+              <div class="grid grid-cols-1 min-[640px]:grid-cols-1 min-[1200px]:grid-cols-1 lg:flex lg:flex-col lg:h-[calc(100vh-7rem)] gap-4">
                 {#each state.stations as station, index}
                   <StationCard
                     {station}
@@ -186,7 +186,7 @@
               <!-- Start/Stop button -->
               <button type="button" 
                       on:click={actions.toggleRunning}
-                      class="text-white font-bold rounded-lg text-2xl min-[400px]:text-3xl sm:text-4xl px-5 h-[70px] sm:h-[94px] transition-all border border-gray-300/90 shadow-md
+                      class="text-white font-bold rounded-lg text-2xl min-[400px]:text-3xl sm:text-4xl px-5 h-[70px] sm:h-[92px] transition-all border border-gray-300/90 shadow-md
                       {state.machine_state === 'on' ? 'bg-red-600 active:bg-red-700 dark:bg-red-700 dark:active:bg-red-800' : 
                        state.machine_state === 'off' ? 'bg-green-600 active:bg-green-700 dark:bg-green-700 dark:active:bg-green-800' : 
                        'bg-gray-500 cursor-not-allowed'}">
@@ -202,7 +202,7 @@
                           appStore.update((s: AppState) => ({ ...s, show_timer_modal: true }));
                         }
                       }}
-                      class="relative text-white bg-gray-600 active:bg-gray-700 font-bold rounded-lg text-xl min-[400px]:text-2xl sm:text-3xl px-5 h-[70px] sm:h-[94px] dark:bg-gray-700 dark:active:bg-gray-800 transition-all flex items-center justify-center gap-2 border border-gray-300/90 shadow-md {state.timer_active ? 'border-4 flash-border border-red-500' : ''}">
+                      class="relative text-white bg-gray-600 active:bg-gray-700 font-bold rounded-lg text-xl min-[400px]:text-2xl sm:text-3xl px-5 h-[70px] sm:h-[92px] dark:bg-gray-700 dark:active:bg-gray-800 transition-all flex items-center justify-center gap-2 border border-gray-300/90 shadow-md {state.timer_active ? 'border-4 flash-border border-red-500' : ''}">
                 {#if !state.timer_end_time}
                   Set Timer
                 {:else}
@@ -218,7 +218,7 @@
                       class="p-4 bg-white border border-gray-300/90 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 h-fit text-left">
                 <div class="flex flex-col gap-3">
                   <!-- Status items -->
-                  <div class="grid grid-cols-2 gap-3 text-base font-bold">
+                  <div class="grid grid-cols-2 gap-4">
                     <!-- Voltage Settings -->
                     <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
                       <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Voltage</h3>
@@ -333,7 +333,7 @@
           <div class="lg:hidden mt-auto pb-4">
             <button on:click={() => appStore.update(s => ({ ...s, show_settings_modal: true }))}
                     class="w-full p-4 bg-white border border-gray-300/90 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 h-fit text-left">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="grid min-[440px]:grid-cols-2 min-[850px]:grid-cols-4 gap-4">
                 <!-- Voltage Settings -->
                 <div class="bg-gray-100 dark:bg-gray-700/50 rounded-lg p-3">
                   <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Voltage</h3>

@@ -144,29 +144,29 @@
   }
 </script>
 
-<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[60]">
-  <div class="bg-white dark:bg-gray-800 w-full max-h-[90vh] md:max-h-[85vh] md:w-auto min-w-[320px] max-w-[1200px] rounded-lg shadow-xl flex flex-col">
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-start sm:items-center justify-center z-[60] p-3">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
     <!-- Header -->
-    <div class="flex justify-between items-center p-4 md:p-6 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">System Settings</h2>
-      <button on:click={closeModal} class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="flex justify-between items-center p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700">
+      <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">System Settings</h2>
+      <button on:click={closeModal} class="p-1.5 sm:p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
     </div>
     
     <!-- Content with scroll -->
-    <div class="flex-1 overflow-y-auto p-3 md:p-4">
+    <div class="flex-1 overflow-y-auto min-h-0 p-2 sm:p-3">
       <!-- Settings form -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+      <div class="grid grid-cols-1 min-[800px]:grid-cols-2 min-[1200px]:grid-cols-4 gap-2 sm:gap-3">
         <!-- Voltage Settings Group -->
-        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Voltage Settings</h3>
-          <div class="flex flex-col gap-4">
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2 sm:p-3 min-w-[250px]">
+          <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">Voltage Settings</h3>
+          <div class="flex flex-col gap-2 sm:gap-3">
             <!-- Cutoff Voltage -->
-            <div class="flex flex-col gap-1.5">
-              <label class="text-base font-medium text-gray-700 dark:text-gray-300">
+            <div class="flex flex-col gap-1">
+              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Cutoff Voltage (V)
               </label>
               <input
@@ -184,19 +184,19 @@
                   step: 0.1,
                   unit: 'V'
                 })}
-                class="px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                class="px-2 py-1.5 sm:px-3 sm:py-2 text-base sm:text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
               />
             </div>
           </div>
         </div>
 
         <!-- Cycle Settings Group -->
-        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Cycle Settings</h3>
-          <div class="flex flex-col gap-4">
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2 sm:p-3 min-w-[250px]">
+          <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">Cycle Settings</h3>
+          <div class="flex flex-col gap-2 sm:gap-3">
             <!-- Cycles Per Minute -->
-            <div class="flex flex-col gap-1.5">
-              <label class="text-base font-medium text-gray-700 dark:text-gray-300">
+            <div class="flex flex-col gap-1">
+              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Rate (cycles/min)
               </label>
               <input
@@ -214,13 +214,13 @@
                   step: 1,
                   unit: 'cyc/min'
                 })}
-                class="px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                class="px-2 py-1.5 sm:px-3 sm:py-2 text-base sm:text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
               />
             </div>
 
             <!-- Cycle Limit -->
-            <div class="flex flex-col gap-1.5">
-              <label class="text-base font-medium text-gray-700 dark:text-gray-300">
+            <div class="flex flex-col gap-1">
+              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Cycle Limit
               </label>
               <input
@@ -238,19 +238,19 @@
                   step: 1000,
                   unit: ''
                 })}
-                class="px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                class="px-2 py-1.5 sm:px-3 sm:py-2 text-base sm:text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
               />
             </div>
           </div>
         </div>
 
         <!-- Motor Settings Group -->
-        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Motor Settings</h3>
-          <div class="flex flex-col gap-4">
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2 sm:p-3 min-w-[250px]">
+          <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">Motor Settings</h3>
+          <div class="flex flex-col gap-2 sm:gap-3">
             <!-- Motor Current Threshold -->
-            <div class="flex flex-col gap-1.5">
-              <label class="text-base font-medium text-gray-700 dark:text-gray-300">
+            <div class="flex flex-col gap-1">
+              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Current Threshold (A)
               </label>
               <input
@@ -268,13 +268,13 @@
                   step: 0.1,
                   unit: 'A'
                 })}
-                class="px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                class="px-2 py-1.5 sm:px-3 sm:py-2 text-base sm:text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
               />
             </div>
 
             <!-- Motor Failure Threshold -->
-            <div class="flex flex-col gap-1.5">
-              <label class="text-base font-medium text-gray-700 dark:text-gray-300">
+            <div class="flex flex-col gap-1">
+              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Failure Threshold
               </label>
               <input
@@ -292,19 +292,19 @@
                   step: 1,
                   unit: ''
                 })}
-                class="px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                class="px-2 py-1.5 sm:px-3 sm:py-2 text-base sm:text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
               />
             </div>
           </div>
         </div>
 
         <!-- Switch Settings Group -->
-        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Switch Settings</h3>
-          <div class="flex flex-col gap-4">
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2 sm:p-3 min-w-[250px]">
+          <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">Switch Settings</h3>
+          <div class="flex flex-col gap-2 sm:gap-3">
             <!-- Switch Current Threshold -->
-            <div class="flex flex-col gap-1.5">
-              <label class="text-base font-medium text-gray-700 dark:text-gray-300">
+            <div class="flex flex-col gap-1">
+              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Current Threshold (A)
               </label>
               <input
@@ -322,13 +322,13 @@
                   step: 0.1,
                   unit: 'A'
                 })}
-                class="px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                class="px-2 py-1.5 sm:px-3 sm:py-2 text-base sm:text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
               />
             </div>
 
             <!-- Switch Failure Threshold -->
-            <div class="flex flex-col gap-1.5">
-              <label class="text-base font-medium text-gray-700 dark:text-gray-300">
+            <div class="flex flex-col gap-1">
+              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Failure Threshold
               </label>
               <input
@@ -346,7 +346,7 @@
                   step: 1,
                   unit: ''
                 })}
-                class="px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                class="px-2 py-1.5 sm:px-3 sm:py-2 text-base sm:text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
               />
             </div>
           </div>
@@ -355,14 +355,14 @@
     </div>
 
     <!-- Footer -->
-    <div class="border-t border-gray-200 dark:border-gray-700 p-4 md:p-6">
-      <div class="flex flex-col-reverse md:flex-row justify-end gap-3 md:gap-4">
+    <div class="border-t border-gray-200 dark:border-gray-700 p-2 sm:p-3">
+      <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3">
         <button on:click={closeModal} 
-                class="w-full md:w-auto px-6 py-3 text-lg text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                class="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg">
           Cancel
         </button>
         <button on:click={saveSettings}
-                class="w-full md:w-auto px-6 py-3 text-lg bg-green-600 text-white rounded-lg hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800">
+                class="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg bg-green-600 text-white rounded-lg hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800">
           Save Settings
         </button>
       </div>
@@ -371,15 +371,17 @@
 </div>
 
 {#if show_numpad && current_field}
-  <NumPad
-    value={editing_settings[current_field.key]?.toString() || '0'}
-    min={current_field.min}
-    max={current_field.max}
-    step={current_field.step}
-    allowDecimal={current_field.step < 1}
-    label={current_field.label}
-    unit={current_field.unit}
-    on:submit={handleNumpadSubmit}
-    on:cancel={handleNumpadCancel}
-  />
+  <div class="z-[70]">
+    <NumPad
+      value={editing_settings[current_field.key]?.toString() || '0'}
+      min={current_field.min}
+      max={current_field.max}
+      step={current_field.step}
+      allowDecimal={current_field.step < 1}
+      label={current_field.label}
+      unit={current_field.unit}
+      on:submit={handleNumpadSubmit}
+      on:cancel={handleNumpadCancel}
+    />
+  </div>
 {/if} 

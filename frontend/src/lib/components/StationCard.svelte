@@ -16,13 +16,13 @@
   <div class="p-[14px] h-full flex">
     <!-- Main content area (clickable) -->
     <div class="flex-1">
-      <!-- Mobile layout (2x2 grid) for screens below lg -->
-      <div class="lg:hidden">
+      <!-- Mobile layout (2x2 grid) for screens below 640px -->
+      <div class="min-[620px]:hidden">
         <!-- Top row: Station ID and toggle switch -->
-        <div class="grid grid-cols-2 gap-4 mb-2">
+        <div class="grid grid-cols-2 gap-4 mb-4">
           <!-- Top Left: Station ID -->
           <div class="flex items-center">
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white whitespace-nowrap">Station {station.id}</h3>
+            <h3 class="text-xl min-[450px]:text-2xl font-bold text-gray-900 dark:text-white whitespace-nowrap">Station {station.id}</h3>
             <button 
               class="ml-2 p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
               on:click={() => {
@@ -40,7 +40,7 @@
             </button>
           </div>
           <!-- Top Right: Toggle switch -->
-          <div class="flex justify-end items-center">
+          <div class="flex justify-end items-center pt-0.5">
             <label class="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" 
                      checked={station.enabled}
@@ -51,52 +51,68 @@
           </div>
         </div>
 
-        <!-- Middle: Cycle count -->
-        <div class="flex flex-col items-center mb-3 py-2 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
-          <div class="flex items-baseline gap-2">
-            <div class="text-3xl font-bold text-gray-900 dark:text-white">
-              {station.current_cycles.toLocaleString()}
+        <!-- Status boxes container -->
+        <div class="flex flex-col min-[410px]:flex-row gap-4">
+          <!-- Cycle count -->
+          <div class="relative flex flex-col py-1 bg-gray-100 dark:bg-gray-700/50 rounded-lg min-h-[60px] min-[410px]:min-w-[80px] min-[410px]:flex-1">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="flex items-baseline gap-2">
+                <div class="text-2xl min-[450px]:text-3xl font-bold text-gray-900 dark:text-white">
+                  {station.current_cycles.toLocaleString()}
+                </div>
+                <div class="text-base font-medium text-gray-500 dark:text-gray-400 min-[410px]:hidden">
+                  Cycles
+                </div>
+              </div>
             </div>
-            <div class="text-base font-medium text-gray-500 dark:text-gray-400">
+            <div class="absolute bottom-4 left-0 right-0 text-base font-medium text-center text-gray-500 dark:text-gray-400 hidden min-[410px]:block">
               Cycles
             </div>
           </div>
-        </div>
 
-        <!-- Bottom row: Status cards -->
-        <div class="grid grid-cols-2 gap-4">
-          <!-- Bottom Left: Motor Status -->
-          <div class="flex flex-col gap-2 p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
-            <div class="flex items-center justify-center relative">
-              <span class="text-base font-semibold text-gray-700 dark:text-gray-300">Motor</span>
-              <div class="absolute right-0 w-2 h-2 rounded-full {motor_indicator_state}"></div>
+          <!-- Status cards -->
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Bottom Left: Motor Status -->
+            <div class="flex flex-col gap-1 p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg w-full min-[410px]:w-[97px]">
+              <div class="flex items-center justify-center relative">
+                <span class="text-base font-semibold text-gray-700 dark:text-gray-300">Motor</span>
+                <div class="absolute right-0 w-2 h-2 rounded-full {motor_indicator_state}"></div>
+              </div>
+              <div class="flex justify-center">
+                <div class="text-base font-bold px-2 py-[1px] rounded-full {getCurrentBadgeClass(station.motor_current, motor_current_threshold)}">
+                  {station.motor_current}
+                </div>
+              </div>
+              <div class="flex justify-center">
+                <div class="text-base font-bold px-2 py-[1px] rounded-full {getFailureBadgeClass(station.motor_failures, motor_failure_threshold)}">
+                  {station.motor_failures} Fails
+                </div>
+              </div>
             </div>
-            <div class="text-base font-bold text-center px-2 py-0.5 rounded-full {getCurrentBadgeClass(station.motor_current, motor_current_threshold)}">
-              {station.motor_current}
-            </div>
-            <div class="text-base font-bold text-center px-2 py-0.5 rounded-full {getFailureBadgeClass(station.motor_failures, motor_failure_threshold)}">
-              {station.motor_failures} Fails
-            </div>
-          </div>
 
-          <!-- Bottom Right: Switch Status -->
-          <div class="flex flex-col gap-2 p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
-            <div class="flex items-center justify-center relative">
-              <span class="text-base font-semibold text-gray-700 dark:text-gray-300">Switch</span>
-              <div class="absolute right-0 w-2 h-2 rounded-full {switch_indicator_state}"></div>
-            </div>
-            <div class="text-base font-bold text-center px-2 py-0.5 rounded-full {getCurrentBadgeClass(station.switch_current, switch_current_threshold)}">
-              {station.switch_current}
-            </div>
-            <div class="text-base font-bold text-center px-2 py-0.5 rounded-full {getFailureBadgeClass(station.switch_failures, switch_failure_threshold)}">
-              {station.switch_failures} Fails
+            <!-- Bottom Right: Switch Status -->
+            <div class="flex flex-col gap-1 p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg w-full min-[410px]:w-[97px]">
+              <div class="flex items-center justify-center relative">
+                <span class="text-base font-semibold text-gray-700 dark:text-gray-300">Switch</span>
+                <div class="absolute right-0 w-2 h-2 rounded-full {switch_indicator_state}"></div>
+              </div>
+              <div class="flex justify-center">
+                <div class="text-base font-bold px-2 py-[1px] rounded-full {getCurrentBadgeClass(station.switch_current, switch_current_threshold)}">
+                  {station.switch_current}
+                </div>
+              </div>
+              <div class="flex justify-center">
+                <div class="text-base font-bold px-2 py-[1px] rounded-full {getFailureBadgeClass(station.switch_failures, switch_failure_threshold)}">
+                  {station.switch_failures} Fails
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Desktop layout (original horizontal layout) -->
-      <div class="hidden lg:flex items-center h-full">
+      <!-- Tablet/Desktop layout (horizontal layout) -->
+      <div class="hidden min-[620px]:flex items-center h-full">
         <!-- Station info -->
         <div class="flex-1">
           <div class="flex items-center gap-2">
@@ -135,12 +151,16 @@
               <div class="absolute -right-3 w-2 h-2 rounded-full {motor_indicator_state}"></div>
             </div>
             <div class="flex flex-col items-center w-[120px]">
-              <span class="text-base font-bold px-2 py-0.5 rounded-full {getCurrentBadgeClass(station.motor_current, motor_current_threshold)}">
-                {station.motor_current}
-              </span>
-              <span class="text-base font-bold px-2 py-0.5 rounded-full mt-1 {getFailureBadgeClass(station.motor_failures, motor_failure_threshold)}">
-                {station.motor_failures} Fails
-              </span>
+              <div class="flex justify-center">
+                <div class="text-base font-bold px-2 py-0.5 rounded-full {getCurrentBadgeClass(station.motor_current, motor_current_threshold)}">
+                  {station.motor_current}
+                </div>
+              </div>
+              <div class="flex justify-center mt-0 min-[620px]:mt-1">
+                <div class="text-base font-bold px-2 py-0.5 rounded-full {getFailureBadgeClass(station.motor_failures, motor_failure_threshold)}">
+                  {station.motor_failures} Fails
+                </div>
+              </div>
             </div>
           </div>
 
@@ -152,12 +172,16 @@
               <div class="absolute -right-3 w-2 h-2 rounded-full {switch_indicator_state}"></div>
             </div>
             <div class="flex flex-col items-center w-[120px]">
-              <span class="text-base font-bold px-2 py-0.5 rounded-full {getCurrentBadgeClass(station.switch_current, switch_current_threshold)}">
-                {station.switch_current}
-              </span>
-              <span class="text-base font-bold px-2 py-0.5 rounded-full mt-1 {getFailureBadgeClass(station.switch_failures, switch_failure_threshold)}">
-                {station.switch_failures} Fails
-              </span>
+              <div class="flex justify-center">
+                <div class="text-base font-bold px-2 py-0.5 rounded-full {getCurrentBadgeClass(station.switch_current, switch_current_threshold)}">
+                  {station.switch_current}
+                </div>
+              </div>
+              <div class="flex justify-center mt-0 min-[620px]:mt-1">
+                <div class="text-base font-bold px-2 py-0.5 rounded-full {getFailureBadgeClass(station.switch_failures, switch_failure_threshold)}">
+                  {station.switch_failures} Fails
+                </div>
+              </div>
             </div>
           </div>
 
@@ -166,8 +190,8 @@
       </div>
     </div>
 
-    <!-- Toggle switch area (desktop only) -->
-    <div class="hidden lg:flex items-center lg:ml-5 lg:mr-2">
+    <!-- Toggle switch area (tablet/desktop only) -->
+    <div class="hidden min-[620px]:flex items-center min-[620px]:ml-5 min-[620px]:mr-2">
       <label class="relative inline-flex items-center cursor-pointer">
         <input type="checkbox" 
                checked={station.enabled}

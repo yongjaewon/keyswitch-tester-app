@@ -3,9 +3,19 @@
   import type { AppState } from '../stores/appStore';
   import { TIMER_SETTINGS } from '../constants';
   import { onMount } from 'svelte';
+  import NumPad from './NumPad.svelte';
 
   let editing_hours = 0;
   let editing_minutes = 0;
+  let show_numpad = false;
+  let current_field: {
+    key: 'hours' | 'minutes';
+    label: string;
+    min: number;
+    max: number;
+    step: number;
+    unit: string;
+  } | null = null;
 
   function handleEscape(event: KeyboardEvent) {
     if (event.key === 'Escape') {
@@ -46,6 +56,36 @@
     await actions.setTimer(editing_hours, editing_minutes);
   }
 
+  function handleInputClick(key: 'hours' | 'minutes') {
+    const config = key === 'hours' 
+      ? { min: 0, max: TIMER_SETTINGS.MAX_HOURS, step: 1, unit: 'hrs' }
+      : { min: 0, max: 59, step: 1, unit: 'min' };
+    
+    current_field = { 
+      key, 
+      label: key === 'hours' ? 'Hours' : 'Minutes',
+      ...config
+    };
+    show_numpad = true;
+  }
+
+  function handleNumpadSubmit(event: CustomEvent<{ value: number }>) {
+    if (current_field) {
+      if (current_field.key === 'hours') {
+        editing_hours = event.detail.value;
+      } else {
+        editing_minutes = event.detail.value;
+      }
+    }
+    show_numpad = false;
+    current_field = null;
+  }
+
+  function handleNumpadCancel() {
+    show_numpad = false;
+    current_field = null;
+  }
+
   function incrementHours() {
     editing_hours = (editing_hours + 1) % (TIMER_SETTINGS.MAX_HOURS + 1);
   }
@@ -61,38 +101,10 @@
   function decrementMinutes() {
     editing_minutes = editing_minutes > 0 ? editing_minutes - 1 : 59;
   }
-
-  function handleHoursInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    let value = parseInt(input.value);
-    
-    if (isNaN(value)) {
-      value = 0;
-    }
-    
-    // Clamp value between 0 and MAX_HOURS
-    value = Math.max(0, Math.min(value, TIMER_SETTINGS.MAX_HOURS));
-    editing_hours = value;
-    input.value = value.toString();
-  }
-
-  function handleMinutesInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    let value = parseInt(input.value);
-    
-    if (isNaN(value)) {
-      value = 0;
-    }
-    
-    // Clamp value between 0 and 59
-    value = Math.max(0, Math.min(value, 59));
-    editing_minutes = value;
-    input.value = value.toString();
-  }
 </script>
 
 <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
-  <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-96 shadow-xl">
+  <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg shadow-xl">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Set Timer</h2>
       <button 
@@ -127,10 +139,11 @@
               inputmode="numeric"
               pattern="[0-9]*"
               bind:value={editing_hours}
-              on:input={handleHoursInput}
+              readonly
+              on:click={() => handleInputClick('hours')}
               min="0"
               max={TIMER_SETTINGS.MAX_HOURS}
-              class="w-full text-4xl font-bold text-gray-900 dark:text-white bg-transparent text-center focus:outline-none touch-manipulation"
+              class="w-full text-4xl font-bold text-gray-900 dark:text-white bg-transparent text-center focus:outline-none touch-manipulation cursor-pointer"
               style="touch-action: manipulation; -moz-appearance: textfield;"
             >
           </div>
@@ -169,10 +182,11 @@
               inputmode="numeric"
               pattern="[0-9]*"
               bind:value={editing_minutes}
-              on:input={handleMinutesInput}
+              readonly
+              on:click={() => handleInputClick('minutes')}
               min="0"
               max="59"
-              class="w-full text-4xl font-bold text-gray-900 dark:text-white bg-transparent text-center focus:outline-none touch-manipulation"
+              class="w-full text-4xl font-bold text-gray-900 dark:text-white bg-transparent text-center focus:outline-none touch-manipulation cursor-pointer"
               style="touch-action: manipulation; -moz-appearance: textfield;"
             >
           </div>
@@ -203,6 +217,22 @@
     </div>
   </div>
 </div>
+
+{#if show_numpad && current_field}
+  <div class="z-[70]">
+    <NumPad
+      value={current_field.key === 'hours' ? editing_hours.toString() : editing_minutes.toString()}
+      min={current_field.min}
+      max={current_field.max}
+      step={current_field.step}
+      allowDecimal={false}
+      label={current_field.label}
+      unit={current_field.unit}
+      on:submit={handleNumpadSubmit}
+      on:cancel={handleNumpadCancel}
+    />
+  </div>
+{/if}
 
 <style>
   /* Remove focus outlines globally */

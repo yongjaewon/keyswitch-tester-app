@@ -4,6 +4,13 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        brand: {
+          DEFAULT: '#FFB71B',
+          light: '#FFC94D',
+          dark: '#E6A318'
+        }
+      },
       fontFamily: {
         'roboto': ['Roboto', 'sans-serif'],
       },
