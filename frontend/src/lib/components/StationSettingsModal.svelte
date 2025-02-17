@@ -100,6 +100,7 @@
       <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Station {station.id} Settings</h2>
       <button 
         on:click={closeModal} 
+        aria-label="Close station settings"
         class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
       >
         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -111,10 +112,11 @@
     <div class="flex flex-col gap-6">
       <!-- Current Cycles -->
       <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label for="currentCycles" class="text-sm font-medium text-gray-700 dark:text-gray-300">
           Current Cycles
         </label>
         <input
+          id="currentCycles"
           type="number"
           bind:value={editing_values.current_cycles}
           min="0"
@@ -126,10 +128,11 @@
 
       <!-- Motor Failures -->
       <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label for="motorFailures" class="text-sm font-medium text-gray-700 dark:text-gray-300">
           Motor Failures
         </label>
         <input
+          id="motorFailures"
           type="number"
           bind:value={editing_values.motor_failures}
           min="0"
@@ -141,10 +144,11 @@
 
       <!-- Switch Failures -->
       <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label for="switchFailures" class="text-sm font-medium text-gray-700 dark:text-gray-300">
           Switch Failures
         </label>
         <input
+          id="switchFailures"
           type="number"
           bind:value={editing_values.switch_failures}
           min="0"
@@ -190,5 +194,6 @@
 
   input[type="number"] {
     -moz-appearance: textfield;
+    appearance: textfield;
   }
 </style> 

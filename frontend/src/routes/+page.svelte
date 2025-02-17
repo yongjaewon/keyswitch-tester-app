@@ -525,27 +525,9 @@
     outline: none !important;
   }
 
-  @keyframes fastBlink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-
-  @keyframes slowBlink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
   @keyframes flash-border {
     0%, 100% { border-color: rgb(239 68 68); }  /* red-500 */
     50% { border-color: transparent; }          /* completely transparent */
-  }
-
-  .fast-blink {
-    animation: fastBlink 0.5s ease-in-out infinite;
-  }
-
-  .slow-blink {
-    animation: slowBlink 2s ease-in-out infinite;
   }
 
   .flash-border {

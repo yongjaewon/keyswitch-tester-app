@@ -111,7 +111,9 @@
       autoplay
       playsinline
       class="w-full h-full object-contain"
-    />
+    >
+      <track kind="captions" label="captions" srclang="en" default />
+    </video>
   </div>
 </div>
 

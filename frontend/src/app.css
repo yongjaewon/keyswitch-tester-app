@@ -16,4 +16,23 @@
   0% { opacity: 1; }
   50% { opacity: 0; }
   100% { opacity: 1; }
-} 
+}
+
+/* Global styles to disable text selection and unwanted touch behaviors */
+html, body {
+  min-height: 100vh;
+  touch-action: pan-x pan-y;            /* Prevents zooming and scroll issues */
+  -webkit-touch-callout: none;           /* Disables iOS callout */
+  -webkit-user-select: none;             /* For Safari */
+  -moz-user-select: none;                /* For Firefox */
+  -ms-user-select: none;                 /* For IE/Edge */
+  user-select: none;                     /* Standard property */
+  overscroll-behavior: none;             /* Prevent overscroll */
+}
+
+* {
+  touch-action: manipulation;           /* Ensures quick responsiveness */
+  -webkit-tap-highlight-color: transparent;  /* Removes tap highlight */
+}
+
+/* You can add your other global styles below */ 

@@ -207,7 +207,6 @@ export const actions = {
     
     appStore.update(state => ({ ...state, ...settings }));
 
-    // Call the API
     try {
       // Extract only the system settings fields
       const systemSettings = {

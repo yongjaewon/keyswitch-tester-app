@@ -10,6 +10,11 @@
   export let switch_current_threshold: number;
   export let motor_failure_threshold: number;
   export let switch_failure_threshold: number;
+
+  function handleCheckboxChange(stationId: number, e: Event): void {
+    const target = e.currentTarget as HTMLInputElement;
+    actions.setStationState(stationId, target.checked);
+  }
 </script>
 
 <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-300/90 dark:border-gray-700 shadow-md lg:h-[114px] lg:flex-none">
@@ -25,8 +30,9 @@
             <h3 class="text-xl min-[450px]:text-2xl font-bold text-gray-900 dark:text-white whitespace-nowrap">Station {station.id}</h3>
             <button 
               class="ml-2 p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              aria-label="Edit station settings"
               on:click={() => {
-                appStore.update(s => ({ 
+                appStore.update((s: any) => ({ 
                   ...s, 
                   show_station_settings_modal: true,
                   selected_station: station
@@ -44,7 +50,7 @@
             <label class="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" 
                      checked={station.enabled}
-                     on:change={(e) => actions.setStationState(station.id, e.currentTarget.checked)}
+                     on:change={(e: Event) => handleCheckboxChange(station.id, e)}
                      class="sr-only peer">
               <div class="w-[72px] h-10 bg-gray-300 border border-gray-300 rounded-full peer dark:bg-gray-600 dark:border-gray-600 peer-checked:after:translate-x-8 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-9 after:w-9 after:transition-all peer-checked:bg-green-600 peer-checked:border-green-600"></div>
             </label>
@@ -119,8 +125,9 @@
             <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Station {station.id}</h3>
             <button 
               class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              aria-label="Edit station settings"
               on:click={() => {
-                appStore.update(s => ({ 
+                appStore.update((s: any) => ({ 
                   ...s, 
                   show_station_settings_modal: true,
                   selected_station: station
@@ -195,7 +202,7 @@
       <label class="relative inline-flex items-center cursor-pointer">
         <input type="checkbox" 
                checked={station.enabled}
-               on:change={(e) => actions.setStationState(station.id, e.currentTarget.checked)}
+               on:change={(e: Event) => handleCheckboxChange(station.id, e)}
                class="sr-only peer">
         <div class="w-[72px] h-10 bg-gray-300 border border-gray-300 rounded-full peer dark:bg-gray-600 dark:border-gray-600 peer-checked:after:translate-x-8 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-9 after:w-9 after:transition-all peer-checked:bg-green-600 peer-checked:border-green-600"></div>
       </label>

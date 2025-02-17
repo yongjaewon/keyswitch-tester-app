@@ -149,7 +149,7 @@
     <!-- Header -->
     <div class="flex justify-between items-center p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700">
       <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">System Settings</h2>
-      <button on:click={closeModal} class="p-1.5 sm:p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+      <button on:click={closeModal} aria-label="Close settings modal" class="p-1.5 sm:p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
         <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
@@ -166,10 +166,11 @@
           <div class="flex flex-col gap-2 sm:gap-3">
             <!-- Cutoff Voltage -->
             <div class="flex flex-col gap-1">
-              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
+              <label for="cutoff_voltage" class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Cutoff Voltage (V)
               </label>
               <input
+                id="cutoff_voltage"
                 type="number"
                 inputmode="decimal"
                 pattern="[0-9]*[.,]?[0-9]*"
@@ -196,10 +197,11 @@
           <div class="flex flex-col gap-2 sm:gap-3">
             <!-- Cycles Per Minute -->
             <div class="flex flex-col gap-1">
-              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
+              <label for="cycles_per_minute" class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Rate (cycles/min)
               </label>
               <input
+                id="cycles_per_minute"
                 type="number"
                 inputmode="numeric"
                 pattern="[0-9]*"
@@ -220,10 +222,11 @@
 
             <!-- Cycle Limit -->
             <div class="flex flex-col gap-1">
-              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
+              <label for="cycle_limit" class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Cycle Limit
               </label>
               <input
+                id="cycle_limit"
                 type="number"
                 inputmode="numeric"
                 pattern="[0-9]*"
@@ -250,10 +253,11 @@
           <div class="flex flex-col gap-2 sm:gap-3">
             <!-- Motor Current Threshold -->
             <div class="flex flex-col gap-1">
-              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
+              <label for="motor_current_threshold" class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Current Threshold (A)
               </label>
               <input
+                id="motor_current_threshold"
                 type="number"
                 inputmode="decimal"
                 pattern="[0-9]*[.,]?[0-9]*"
@@ -274,10 +278,11 @@
 
             <!-- Motor Failure Threshold -->
             <div class="flex flex-col gap-1">
-              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
+              <label for="motor_failure_threshold" class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Failure Threshold
               </label>
               <input
+                id="motor_failure_threshold"
                 type="number"
                 inputmode="numeric"
                 pattern="[0-9]*"
@@ -304,10 +309,11 @@
           <div class="flex flex-col gap-2 sm:gap-3">
             <!-- Switch Current Threshold -->
             <div class="flex flex-col gap-1">
-              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
+              <label for="switch_current_threshold" class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Current Threshold (A)
               </label>
               <input
+                id="switch_current_threshold"
                 type="number"
                 inputmode="decimal"
                 pattern="[0-9]*[.,]?[0-9]*"
@@ -328,10 +334,11 @@
 
             <!-- Switch Failure Threshold -->
             <div class="flex flex-col gap-1">
-              <label class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
+              <label for="switch_failure_threshold" class="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
                 Failure Threshold
               </label>
               <input
+                id="switch_failure_threshold"
                 type="number"
                 inputmode="numeric"
                 pattern="[0-9]*"

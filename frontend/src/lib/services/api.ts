@@ -1,6 +1,5 @@
 import type { AppState } from '../stores/appStore';
 import { connectionStore } from '../stores/connectionStore';
-import { appStore } from '../stores/appStore';
 
 // Types for API requests and responses
 interface SystemSettings {
@@ -31,17 +30,44 @@ interface SystemState {
   stations: Station[];
 }
 
+// Message handlers type
+type MessageHandler = (data: any) => void;
+
+// Message handlers for different event types
+const message_handlers: { [key: string]: MessageHandler[] } = {};
+
 // WebSocket connection
 let ws: WebSocket | null = null;
 let reconnect_attempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 5;
 const RECONNECT_DELAY = 2000;
 
-// Event handlers type
-type MessageHandler = (data: any) => void;
+// Register message handler
+export function onMessage(type: string, handler: MessageHandler) {
+  // Only register handlers on the client side
+  if (typeof window === 'undefined') {
+    return () => {}; // Return no-op cleanup function for SSR
+  }
+  
+  if (!message_handlers[type]) {
+    message_handlers[type] = [];
+  }
+  message_handlers[type].push(handler);
+  return () => {
+    message_handlers[type] = message_handlers[type].filter(h => h !== handler);
+  };
+}
 
-// Message handlers for different event types
-const message_handlers: { [key: string]: MessageHandler[] } = {};
+// Send message to server
+export function sendMessage(type: string, data: any) {
+  if (!ws || typeof window === 'undefined') return;
+  
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ type, data }));
+  } else {
+    console.error('WebSocket is not connected');
+  }
+}
 
 // Initialize WebSocket connection
 export async function initializeWebSocket(is_manual_retry: boolean = false) {
@@ -108,33 +134,6 @@ export async function initializeWebSocket(is_manual_retry: boolean = false) {
     console.error('WebSocket error:', error);
     connectionStore.setDisconnected();
   };
-}
-
-// Register message handler
-export function onMessage(type: string, handler: MessageHandler) {
-  // Only register handlers on the client side
-  if (typeof window === 'undefined') {
-    return () => {}; // Return no-op cleanup function for SSR
-  }
-  
-  if (!message_handlers[type]) {
-    message_handlers[type] = [];
-  }
-  message_handlers[type].push(handler);
-  return () => {
-    message_handlers[type] = message_handlers[type].filter(h => h !== handler);
-  };
-}
-
-// Send message to server
-export function sendMessage(type: string, data: any) {
-  if (!ws || typeof window === 'undefined') return;
-  
-  if (ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ type, data }));
-  } else {
-    console.error('WebSocket is not connected');
-  }
 }
 
 // API endpoints
@@ -269,18 +268,3 @@ export const api = {
     return response.json();
   }
 };
-
-// WebSocket message handlers
-onMessage('status_update', (data: any) => {
-    appStore.update((state: AppState) => ({
-        ...state,
-        // ... existing code ...
-    }));
-});
-
-onMessage('history_update', (data: any) => {
-    appStore.update((state: AppState) => ({
-        ...state,
-        history: data
-    }));
-}); 
