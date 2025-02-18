@@ -15,6 +15,7 @@ import json
 from aiortc import RTCPeerConnection, RTCSessionDescription
 from camera import CameraManager
 from actuation_scheduler import actuation_scheduler
+import uvicorn
 
 from database import get_db, init_db
 from models import Station, SystemSettings, SystemState, SystemHistory, MachineStateEnum
@@ -144,7 +145,7 @@ api_router = APIRouter(prefix="/api")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
@@ -385,8 +386,9 @@ async def monitor_status(app: FastAPI):
                         if all(k in sensor_data for k in ['station_id', 'motor_current', 'switch_current']):
                             station = db.query(Station).filter_by(id=sensor_data['station_id']).first()
                             if station:
-                                settings = db.query(SystemSettings).first()
-                                if not settings:
+                                # Get current settings
+                                current_settings = db.query(SystemSettings).first()
+                                if not current_settings:
                                     logger.error("System settings not found")
                                     continue
                                 
@@ -397,17 +399,17 @@ async def monitor_status(app: FastAPI):
                                 station.current_cycles += 1
                                 
                                 # Check for failures
-                                if station.motor_current > settings.motor_current_threshold:
+                                if station.motor_current > current_settings.motor_current_threshold:
                                     station.motor_failures += 1
                                     logger.warning(f"Station {station.id} motor failure detected")
-                                if station.switch_current > settings.switch_current_threshold:
+                                if station.switch_current > current_settings.switch_current_threshold:
                                     station.switch_failures += 1
                                     logger.warning(f"Station {station.id} switch failure detected")
                                 
                                 # Auto-disable if limits reached
-                                if (station.current_cycles >= settings.cycle_limit or
-                                    station.motor_failures >= settings.motor_failure_threshold or
-                                    station.switch_failures >= settings.switch_failure_threshold):
+                                if (station.current_cycles >= current_settings.cycle_limit or
+                                    station.motor_failures >= current_settings.motor_failure_threshold or
+                                    station.switch_failures >= current_settings.switch_failure_threshold):
                                     station.enabled = False
                                     logger.info(f"Station {station.id} auto-disabled due to limits reached")
                                 
@@ -423,8 +425,8 @@ async def monitor_status(app: FastAPI):
                                     switch_current=station.switch_current,
                                     supply_voltage=system_state.supply_voltage,
                                     machine_state=system_state.machine_state,
-                                    cycle_limit=settings.cycle_limit,
-                                    cycles_per_minute=settings.cycles_per_minute
+                                    cycle_limit=current_settings.cycle_limit,
+                                    cycles_per_minute=current_settings.cycles_per_minute
                                 )
                                 db.add(history)
                                 db.commit()
@@ -493,6 +495,7 @@ async def send_hal_state():
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await ws_manager.connect(websocket)
+    logger.info("New WebSocket client connection established")
     try:
         while True:
             try:
@@ -799,11 +802,83 @@ async def get_history(db: Session = Depends(get_db)):
 # Include the API router
 app.include_router(api_router)
 
-if __name__ == "__main__":
-    import uvicorn
-    import signal
+@app.on_event("startup")
+async def startup_event():
+    # Initialize database
+    init_db()
     
-    # Configure uvicorn to handle signals properly
+    # Initialize HAL
+    hal = HardwareAbstractionLayer()
+    await hal.connect()
+    app.state.hal = hal
+    
+    # Initialize WebSocket manager
+    websocket_manager = WebSocketManager()
+    app.state.websocket_manager = websocket_manager
+
+    # Ensure database has required records
+    async with get_db_context() as db:
+        # Ensure system state exists
+        system_state = db.query(SystemState).first()
+        if not system_state:
+            logger.info("Initializing system state")
+            system_state = SystemState(
+                supply_voltage=13.2,
+                timer_active=False,
+                timer_end_time=None,
+                machine_state=MachineStateEnum.off
+            )
+            db.add(system_state)
+            db.commit()
+
+        # Ensure system settings exist
+        settings = db.query(SystemSettings).first()
+        if not settings:
+            logger.info("Initializing system settings")
+            settings = SystemSettings(
+                cutoff_voltage=11.1,
+                motor_current_threshold=100.0,
+                switch_current_threshold=5.0,
+                cycle_limit=100000,
+                motor_failure_threshold=10,
+                switch_failure_threshold=10,
+                cycles_per_minute=6,
+                pin_code="1234"
+            )
+            db.add(settings)
+            db.commit()
+
+        # Ensure stations exist
+        stations = db.query(Station).all()
+        if not stations:
+            logger.info("Initializing stations")
+            for station_id in range(1, 5):
+                station = Station(
+                    id=station_id,
+                    enabled=False,
+                    motor_failures=0,
+                    switch_failures=0,
+                    current_cycles=0,
+                    motor_current=0.0,
+                    switch_current=0.0
+                )
+                db.add(station)
+            db.commit()
+
+    # Start background tasks
+    background_tasks.append(asyncio.create_task(monitor_status(app)))
+    background_tasks.append(asyncio.create_task(send_hal_state()))
+    background_tasks.append(asyncio.create_task(actuation_scheduler(app)))
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    # Cleanup
+    for task in background_tasks:
+        task.cancel()
+    await asyncio.gather(*background_tasks, return_exceptions=True)
+    await app.state.hal.disconnect()
+
+if __name__ == "__main__":
     config = uvicorn.Config(
         app=app,
         host=HOST,

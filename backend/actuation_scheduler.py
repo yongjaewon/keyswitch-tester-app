@@ -3,13 +3,18 @@
 
 import asyncio
 import logging
+import os
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 
 from database import get_db
 from models import Station, SystemSettings, SystemState, MachineStateEnum
 
+# Load environment variables
+load_dotenv()
+
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.WARNING)  # Set base level to WARNING
+logger.setLevel(getattr(logging, os.getenv('LOG_LEVEL', 'WARNING')))
 
 @asynccontextmanager
 async def get_db_context():

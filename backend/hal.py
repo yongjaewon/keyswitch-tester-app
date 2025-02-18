@@ -2,10 +2,14 @@ import json
 import asyncio
 import logging
 import os
+from dotenv import load_dotenv
 import serial.tools.list_ports
 
+# Load environment variables
+load_dotenv()
+
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.WARNING)  # Set base level to WARNING
+logger.setLevel(getattr(logging, os.getenv('LOG_LEVEL', 'WARNING')))
 
 # Import Dynamixel SDK constants and classes
 from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS

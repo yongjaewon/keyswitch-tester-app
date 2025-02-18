@@ -137,14 +137,13 @@ export async function initializeWebSocket(is_manual_retry: boolean = false) {
 }
 
 // API endpoints
-const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api`;
 
 // HTTP request helper
 async function fetchWithError(url: string, options: RequestInit = {}) {
   try {
     const response = await fetch(url, {
       ...options,
-      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,
@@ -167,25 +166,20 @@ async function fetchWithError(url: string, options: RequestInit = {}) {
 export const api = {
   // Authentication
   async authenticate(pin: string): Promise<boolean> {
-    const response = await fetch(`${API_BASE_URL}/auth?pin=${pin}`, {
-      credentials: 'include'
-    });
+    const response = await fetch(`${API_BASE_URL}/auth?pin=${pin}`);
     const data = await response.json();
     return data.success;
   },
 
   // Settings
   async getSettings(): Promise<Partial<AppState>> {
-    const response = await fetch(`${API_BASE_URL}/settings`, {
-      credentials: 'include'
-    });
+    const response = await fetch(`${API_BASE_URL}/settings`);
     return response.json();
   },
 
   async updateSettings(settings: Partial<AppState>): Promise<boolean> {
     const response = await fetch(`${API_BASE_URL}/settings`, {
       method: 'POST',
-      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -197,17 +191,14 @@ export const api = {
 
   // System status
   async getStatus(): Promise<any> {
-    const response = await fetch(`${API_BASE_URL}/status`, {
-      credentials: 'include'
-    });
+    const response = await fetch(`${API_BASE_URL}/status`);
     return response.json();
   },
 
   // Test control
   async startTest(): Promise<boolean> {
     const response = await fetch(`${API_BASE_URL}/test/start`, {
-      method: 'POST',
-      credentials: 'include'
+      method: 'POST'
     });
     const data = await response.json();
     return data.success;
@@ -215,8 +206,7 @@ export const api = {
 
   async stopTest(): Promise<boolean> {
     const response = await fetch(`${API_BASE_URL}/test/stop`, {
-      method: 'POST',
-      credentials: 'include'
+      method: 'POST'
     });
     const data = await response.json();
     return data.success;
