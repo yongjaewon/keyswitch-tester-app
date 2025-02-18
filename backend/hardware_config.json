@@ -1,17 +1,20 @@
 {
   "phidgets": {
-    "sensor_mode": "event",
-    "data_interval": 100,
+    "sensor_mode": "polling",
+    "data_interval": 10,
     "ports": {
-      "supply_voltage": 0,
       "motor_current": 1,
-      "switch_current": 2
+      "supply_voltage": 2,
+      "switch_current": 3
     }
   },
   "servo": {
     "default_target_angle": 100,
     "current_limit_percent": 7,
-    "baudrate": 57600
+    "baudrate": 57600,
+    "press_duration": 0.6,
+    "return_duration": 0.3,
+    "cycle_duration": 0.9
   },
   "low_voltage": {
     "cutoff_voltage": 11.1,

@@ -154,14 +154,29 @@ export const actions = {
       console.error('Machine is disabled. Cannot start.');
       return;
     }
+
+    // Store previous state for potential rollback
+    const previousState = state.machine_state;
+    
+    // Optimistically update the UI
+    appStore.update(state => ({
+      ...state,
+      machine_state: state.machine_state === 'off' ? 'on' : 'off'
+    }));
+
     try {
-      if(state.machine_state === 'off') {
+      if(previousState === 'off') {
         await api.startTest();
-      } else if(state.machine_state === 'on') {
+      } else if(previousState === 'on') {
         await api.stopTest();
       }
     } catch (error) {
       console.error('Error toggling test state:', error);
+      // Revert the state if the API call fails
+      appStore.update(state => ({
+        ...state,
+        machine_state: previousState
+      }));
     }
   },
 

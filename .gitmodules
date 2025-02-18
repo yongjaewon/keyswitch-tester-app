@@ -1,0 +1,3 @@
+[submodule "backend/dynamixel-async"]
+	path = backend/dynamixel-async
+	url = https://github.com/yongjaewon/dynamixel-async.git

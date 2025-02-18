@@ -4,7 +4,7 @@ export function formatTime(hours: number, minutes: number, seconds: number): str
 
 export function getCurrentBadgeClass(current: string, threshold: number): string {
   const value = parseFloat(current);
-  if (value > threshold) {
+  if (value < threshold) {
     return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
   }
   return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';

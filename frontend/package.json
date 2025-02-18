@@ -36,5 +36,9 @@
     "typescript": "^5.3.3",
     "vite": "^6.0.0",
     "vite-svg-loader": "^5.1.0"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "http-proxy-middleware": "^3.0.3"
   }
 }

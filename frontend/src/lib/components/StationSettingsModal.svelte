@@ -50,6 +50,10 @@
     };
   }
 
+  function resetField(key: keyof typeof editing_values) {
+    editing_values[key] = 0;
+  }
+
   async function handleSave() {
     try {
       await actions.updateStationSettings(station.id, editing_values);
@@ -115,15 +119,26 @@
         <label for="currentCycles" class="text-sm font-medium text-gray-700 dark:text-gray-300">
           Current Cycles
         </label>
-        <input
-          id="currentCycles"
-          type="number"
-          bind:value={editing_values.current_cycles}
-          min="0"
-          readonly
-          on:click={() => handleInputClick('current_cycles', 'Current Cycles')}
-          class="px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white cursor-pointer"
-        />
+        <div class="flex gap-2">
+          <input
+            id="currentCycles"
+            type="number"
+            bind:value={editing_values.current_cycles}
+            min="0"
+            readonly
+            on:click={() => handleInputClick('current_cycles', 'Current Cycles')}
+            class="flex-1 px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white cursor-pointer"
+          />
+          <button 
+            on:click={() => resetField('current_cycles')}
+            class="px-3 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+            aria-label="Reset current cycles"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <!-- Motor Failures -->
@@ -131,15 +146,26 @@
         <label for="motorFailures" class="text-sm font-medium text-gray-700 dark:text-gray-300">
           Motor Failures
         </label>
-        <input
-          id="motorFailures"
-          type="number"
-          bind:value={editing_values.motor_failures}
-          min="0"
-          readonly
-          on:click={() => handleInputClick('motor_failures', 'Motor Failures')}
-          class="px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white cursor-pointer"
-        />
+        <div class="flex gap-2">
+          <input
+            id="motorFailures"
+            type="number"
+            bind:value={editing_values.motor_failures}
+            min="0"
+            readonly
+            on:click={() => handleInputClick('motor_failures', 'Motor Failures')}
+            class="flex-1 px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white cursor-pointer"
+          />
+          <button 
+            on:click={() => resetField('motor_failures')}
+            class="px-3 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+            aria-label="Reset motor failures"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <!-- Switch Failures -->
@@ -147,15 +173,26 @@
         <label for="switchFailures" class="text-sm font-medium text-gray-700 dark:text-gray-300">
           Switch Failures
         </label>
-        <input
-          id="switchFailures"
-          type="number"
-          bind:value={editing_values.switch_failures}
-          min="0"
-          readonly
-          on:click={() => handleInputClick('switch_failures', 'Switch Failures')}
-          class="px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white cursor-pointer"
-        />
+        <div class="flex gap-2">
+          <input
+            id="switchFailures"
+            type="number"
+            bind:value={editing_values.switch_failures}
+            min="0"
+            readonly
+            on:click={() => handleInputClick('switch_failures', 'Switch Failures')}
+            class="flex-1 px-3 py-2 text-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white cursor-pointer"
+          />
+          <button 
+            on:click={() => resetField('switch_failures')}
+            class="px-3 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+            aria-label="Reset switch failures"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div class="flex justify-between gap-4 mt-2">

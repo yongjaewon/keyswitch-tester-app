@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 import json
 from aiortc import RTCPeerConnection, RTCSessionDescription
 from camera import CameraManager
+from actuation_scheduler import actuation_scheduler
 
 from database import get_db, init_db
 from models import Station, SystemSettings, SystemState, SystemHistory, MachineStateEnum
@@ -118,6 +119,7 @@ async def lifespan(app: FastAPI):
     # Start background tasks
     background_tasks.append(asyncio.create_task(monitor_status(app)))
     background_tasks.append(asyncio.create_task(send_hal_state()))
+    background_tasks.append(asyncio.create_task(actuation_scheduler(app)))
 
     try:
         yield
